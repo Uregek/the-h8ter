@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CONSUMER
+  PROVIDER
+  MODERATOR
+  ADMIN
+}
+
+model Profile {
+  id       String  @id @default(uuid())
+  userId   String  @unique
+  username String  @unique
+  role     Role    @default(CONSUMER)
+  email    String
+  imageUrl String
+  active   Boolean @default(true)
+
+  lots Lot[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Plot {
+  id          String  @id @default(uuid())
+  title       String
+  slug        String  @unique
+  description String?
+  visible     Boolean @default(true)
+
+  chips Chip[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Chip {
+  id          String  @id @default(uuid())
+  title       String
+  slug        String
+  description String?
+  visible     Boolean @default(true)
+
+  plotSlug String
+  plot     Plot   @relation(fields: [plotSlug], references: [slug], onDelete: Cascade)
+
+  lots Lot[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([slug, plotSlug], name: "uniqueSlugWithinPlot")
+}
+
+model Lot {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+
+  chipId String
+  chip   Chip   @relation(fields: [chipId], references: [id])
+
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id])
+
+  schema LotSchema?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LotSchema {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+
+  schema Json
+
+  lotId String @unique
+  lot   Lot    @relation(fields: [lotId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
