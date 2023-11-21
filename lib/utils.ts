@@ -1,5 +1,6 @@
 import { Role } from '@prisma/client'
 import { type ClassValue, clsx } from 'clsx'
+import nextSlugify from 'slugify'
 import { twMerge } from 'tailwind-merge'
 
 import { config } from './config'
@@ -11,8 +12,10 @@ export function cn(...inputs: ClassValue[]) {
 export function slugify(string: string) {
 	if (!string) return ''
 
+	let slug = nextSlugify(string)
+
 	// make lower case and trim
-	var slug = string.toLowerCase().trim()
+	slug = slug.toLowerCase().trim()
 
 	// remove accents from charaters
 	slug = slug.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
