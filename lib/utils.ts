@@ -1,5 +1,6 @@
 import { Role } from '@prisma/client'
 import { type ClassValue, clsx } from 'clsx'
+import { LoremIpsum } from 'lorem-ipsum'
 import nextSlugify from 'slugify'
 import { twMerge } from 'tailwind-merge'
 
@@ -39,4 +40,14 @@ export function isHaveRoleAccess(
 			`${config.rolesWeights[role]} ${rights} ${config.rolesWeights[comparedRole]}`,
 		),
 	)
+}
+
+export const lorem = new LoremIpsum()
+
+export function randomIntFromInterval(from: number, to: number) {
+	return Math.floor(Math.random() * (to - from + 1) + from)
+}
+
+export async function sleep(ms: number) {
+	return await new Promise((r) => setTimeout(r, ms))
 }

@@ -66,6 +66,7 @@
 		"framer-motion": "^10.16.5",
 		"fuse.js": "^7.0.0",
 		"lodash": "^4.17.21",
+		"lorem-ipsum": "^2.0.8",
 		"lottie-colorify": "^0.8.0",
 		"lottie-react": "^2.4.0",
 		"lucide-react": "^0.292.0",
