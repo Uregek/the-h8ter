@@ -24,6 +24,8 @@ model Profile {
   imageUrl String
   active   Boolean @default(true)
 
+  favoritedPlots Plot[]
+
   lots Lot[]
 
   createdAt DateTime @default(now())
@@ -36,8 +38,11 @@ model Plot {
   slug        String  @unique
   description String?
   visible     Boolean @default(true)
+  promoted    Boolean @default(false)
 
   chips Chip[]
+
+  favoritedBy Profile[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
