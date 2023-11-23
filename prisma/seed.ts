@@ -4,14 +4,14 @@ import { slugify } from '../lib/utils'
 import data from './data.json'
 
 async function main() {
-	await db.profile.update({
-		where: {
-			username: 'uregek',
-		},
-		data: {
-			role: 'ADMIN',
-		},
-	})
+	// await db.profile.update({
+	// 	where: {
+	// 		username: 'uregek',
+	// 	},
+	// 	data: {
+	// 		role: 'ADMIN',
+	// 	},
+	// })
 	// for (const { title, chips } of data) {
 	// 	await db.plot.upsert({
 	// 		where: {

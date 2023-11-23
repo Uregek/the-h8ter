@@ -36,6 +36,8 @@ export default async function Page() {
 
 	const groupedObjects = groupPlotsByFirstLetter(plots)
 
+	const promotedPlots = plots.filter((plot) => plot.promoted)
+
 	return (
 		<section className="flex grow gap-[30px] my-[30px] flex-col items-center justify-center">
 			<Skeleton className="h-[600px] w-full max-w-screen-lg" />
@@ -45,18 +47,17 @@ export default async function Page() {
 				Chips ✦
 			</h1>
 
-			<div className="flex w-full grow bg-primary gap-[30px] py-2 flex-col items-center justify-center">
-				<div className="flex relative max-w-screen-md w-full flex-row mx-auto gap-[20px] pl-[30px]">
-					<div
-						className="flex flex-col justify-center items-center h-min gap-1 sticky"
-						style={{ top: config.headerHeight + 10 }}
-					>
-						<HeartFilledIcon className="text-primary-foreground" />
-					</div>
-					<div className="flex grow flex-row flex-wrap pl-[20px]">
-						{plots
-							.filter((plot) => plot.promoted)
-							.map((plot) => (
+			{Boolean(promotedPlots && promotedPlots.length) && (
+				<div className="flex w-full grow bg-primary gap-[30px] py-2 flex-col items-center justify-center">
+					<div className="flex relative max-w-screen-md w-full flex-row mx-auto gap-[20px] pl-[30px]">
+						<div
+							className="flex flex-col justify-center items-center h-min gap-1 sticky"
+							style={{ top: config.headerHeight + 10 }}
+						>
+							<HeartFilledIcon className="text-primary-foreground" />
+						</div>
+						<div className="flex grow flex-row flex-wrap pl-[20px]">
+							{promotedPlots.map((plot) => (
 								<Plot
 									key={plot.id}
 									plot={plot}
@@ -68,9 +69,10 @@ export default async function Page() {
 									promoted
 								/>
 							))}
+						</div>
 					</div>
 				</div>
-			</div>
+			)}
 
 			<div className="flex relative max-w-screen-md w-full flex-row mx-auto gap-[20px] pl-[30px]">
 				<div
