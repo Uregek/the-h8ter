@@ -15,3 +15,8 @@ export const patchPlotSchema = z
 		visible: z.boolean(),
 	})
 	.partial()
+
+export const favoritePlotSchema = z.object({
+	username: z.string(),
+	favorite: z.boolean(),
+})
