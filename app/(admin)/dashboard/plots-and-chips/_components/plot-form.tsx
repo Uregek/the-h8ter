@@ -163,6 +163,7 @@ export function PlotForm({ plot, asModal, type, handleClose }: PlotFormProps) {
 				title: plot?.title || '',
 				slug: plot?.slug || '',
 				description: plot?.description || null,
+				promoted: plot?.promoted || false,
 				visible: plot?.visible || false,
 			}),
 			[plot],
@@ -175,6 +176,7 @@ export function PlotForm({ plot, asModal, type, handleClose }: PlotFormProps) {
 				title: plot.title,
 				slug: plot.slug,
 				description: plot.description,
+				promoted: plot.promoted,
 				visible: plot.visible,
 			})
 		}
@@ -186,7 +188,7 @@ export function PlotForm({ plot, asModal, type, handleClose }: PlotFormProps) {
 			title && form.setValue('slug', slugify(title))
 		}
 
-		const subscription = form.watch((values, { name, type }) => {
+		const subscription = form.watch((values, { name }) => {
 			if (name === 'title') {
 				linkSlug && form.setValue('slug', slugify(values.title!))
 			}
@@ -279,6 +281,27 @@ export function PlotForm({ plot, asModal, type, handleClose }: PlotFormProps) {
 										The unique identifying part of a web address.
 									</FormDescription>
 									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="promoted"
+							render={({ field }) => (
+								<FormItem className="flex flex-row items-start space-x-3 space-y-0">
+									<FormControl>
+										<Checkbox
+											checked={field.value}
+											onCheckedChange={field.onChange}
+										/>
+									</FormControl>
+									<div className="space-y-1 leading-none">
+										<FormLabel>Promoted</FormLabel>
+										<FormDescription>
+											You can manage should Plot be of the top list or not.
+										</FormDescription>
+									</div>
 								</FormItem>
 							)}
 						/>
