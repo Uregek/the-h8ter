@@ -74,7 +74,7 @@ export function DataTableFacetedFilter<TData, TValue>({
 												key={option.value as string}
 												className="rounded-sm px-1 font-normal"
 											>
-												{option.label}
+												{option.icon ? <option.icon /> : option.label}
 											</Badge>
 										))
 								)}

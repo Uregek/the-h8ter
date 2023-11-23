@@ -1,4 +1,9 @@
-import { EyeNoneIcon, EyeOpenIcon } from '@radix-ui/react-icons'
+import {
+	EyeNoneIcon,
+	EyeOpenIcon,
+	LightningBoltIcon,
+	ValueNoneIcon,
+} from '@radix-ui/react-icons'
 import {
 	ActivityIcon,
 	BanIcon,
@@ -50,6 +55,18 @@ export const config = {
 			value: false,
 			label: 'Banned',
 			icon: BanIcon,
+		},
+	],
+	promotedMap: [
+		{
+			value: true,
+			label: 'Promoted',
+			icon: LightningBoltIcon,
+		},
+		{
+			value: false,
+			label: 'Unpromoted',
+			icon: ValueNoneIcon,
 		},
 	],
 	visibilityMap: [
