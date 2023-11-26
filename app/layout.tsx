@@ -34,7 +34,7 @@ export default async function RootLayout({
 			>
 				<Providers>
 					<Header />
-					<main className="flex grow">{children}</main>
+					<main className="flex flex-col grow">{children}</main>
 					<Footer />
 					<Toaster />
 					<div id="confetti-portal" />

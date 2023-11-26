@@ -8,11 +8,15 @@ import { useTheme } from 'next-themes'
 
 export function ClerkProvider({ children }: { children: ReactNode }) {
 	const { theme } = useTheme()
+	const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+	let calculatedTheme =
+		theme === 'system' ? (prefersDark ? 'dark' : 'light') : theme
 
 	return (
 		<NextClerkProvider
 			appearance={{
-				baseTheme: theme === 'dark' ? dark : undefined,
+				baseTheme: calculatedTheme === 'dark' ? dark : undefined,
 			}}
 		>
 			{children}

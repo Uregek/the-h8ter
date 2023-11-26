@@ -68,6 +68,13 @@ export function DataTableToolbar<TData>({
 							options={letters}
 						/>
 					)}
+					{table.getColumn('promoted') && (
+						<DataTableFacetedFilter
+							column={table.getColumn('promoted')}
+							title="Promoted"
+							options={config.promotedMap}
+						/>
+					)}
 					{table.getColumn('visible') && (
 						<DataTableFacetedFilter
 							column={table.getColumn('visible')}

@@ -1,15 +1,17 @@
-import { Fragment } from 'react'
+import { HeartFilledIcon } from '@radix-ui/react-icons'
 
-import Link from 'next/link'
-
-import { getPlotsWithChips, PlotsWithChips } from '@/actions/get-plots'
-import { Plot } from '@/components/ui/plot'
-import { Separator } from '@/components/ui/separator'
+import {
+	getFavoritedPlotsWithChips,
+	getPlotsWithChips,
+	PlotsWithChips,
+} from '@/actions/get-plots'
+import { Plot as PlotWrapper } from '@/components/ui/plot'
 import { Skeleton } from '@/components/ui/skeleton'
 import { config } from '@/lib/config'
-import { cn } from '@/lib/utils'
+import { getUser } from '@/lib/get-user'
 
-import { LetterList } from '../_components/letter-list'
+import { LetterList } from './plots/_components/letter-list'
+import { Plot } from './plots/_components/plot'
 
 function groupPlotsByFirstLetter(plots: PlotsWithChips) {
 	const grouped: Record<string, PlotsWithChips> = {}
@@ -28,16 +30,50 @@ function groupPlotsByFirstLetter(plots: PlotsWithChips) {
 export default async function Page() {
 	const plots = await getPlotsWithChips(true)
 
+	const user = await getUser()
+
+	const favoritedPlots = await getFavoritedPlotsWithChips(true, user?.username)
+
 	const groupedObjects = groupPlotsByFirstLetter(plots)
+
+	const promotedPlots = plots.filter((plot) => plot.promoted)
 
 	return (
 		<section className="flex grow gap-[30px] my-[30px] flex-col items-center justify-center">
 			<Skeleton className="h-[600px] w-full max-w-screen-lg" />
 			<h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-				<Plot>Plots</Plot>
+				<PlotWrapper>Plots</PlotWrapper>
 				<span className="text-muted-foreground">{' & '}</span>
 				Chips ✦
 			</h1>
+
+			{Boolean(promotedPlots && promotedPlots.length) && (
+				<div className="flex w-full grow bg-primary gap-[30px] py-2 flex-col items-center justify-center">
+					<div className="flex relative max-w-screen-md w-full flex-row mx-auto gap-[20px] pl-[30px]">
+						<div
+							className="flex flex-col justify-center items-center h-min gap-1 sticky"
+							style={{ top: config.headerHeight + 10 }}
+						>
+							<HeartFilledIcon className="text-primary-foreground" />
+						</div>
+						<div className="flex grow flex-row flex-wrap pl-[20px]">
+							{promotedPlots.map((plot) => (
+								<Plot
+									key={plot.id}
+									plot={plot}
+									username={user?.username}
+									role={user?.role}
+									favorited={favoritedPlots.some(
+										(favoritedPlot) => favoritedPlot.id === plot.id,
+									)}
+									promoted
+								/>
+							))}
+						</div>
+					</div>
+				</div>
+			)}
+
 			<div className="flex relative max-w-screen-md w-full flex-row mx-auto gap-[20px] pl-[30px]">
 				<div
 					className="flex flex-col justify-center items-center h-min gap-1 sticky"
@@ -61,41 +97,16 @@ export default async function Page() {
 								{letter}
 							</a>
 							<div className="flex flex-row flex-wrap pl-[20px]">
-								{objectsArray.map(({ id, title, slug, chips }) => (
-									<div
-										key={id}
-										className={cn('flex basis-1/4 flex-col p-3', {
-											'basis-1/2': chips.length >= 10,
-											'basis-full': chips.length >= 15,
-										})}
-									>
-										<Link
-											prefetch={false}
-											href={`/plots/${slug}`}
-											className="leading-7 hover:underline max-w-fit text-primary"
-											id={slug}
-											style={{ scrollMarginTop: config.headerHeight + 10 }}
-										>
-											<Plot>{title}</Plot>
-										</Link>
-										<Separator className="my-2" />
-										<div className="flex items-center flex-wrap gap-1 text-sm">
-											{chips.map(({ id, title, ...other }, index) => (
-												<Fragment key={id}>
-													{index !== 0 && (
-														<p className="text-sm text-muted-foreground">✦</p>
-													)}
-													<Link
-														prefetch={false}
-														href={`/plots/${slug}/${other.slug}`}
-														className="text-sm text-muted-foreground hover:underline hover:text-accent-foreground"
-													>
-														{title}
-													</Link>
-												</Fragment>
-											))}
-										</div>
-									</div>
+								{objectsArray.map((plot) => (
+									<Plot
+										key={plot.id}
+										plot={plot}
+										username={user?.username}
+										role={user?.role}
+										favorited={favoritedPlots.some(
+											(favoritedPlot) => favoritedPlot.id === plot.id,
+										)}
+									/>
 								))}
 							</div>
 						</div>

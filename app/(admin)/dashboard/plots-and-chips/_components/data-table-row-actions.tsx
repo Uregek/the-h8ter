@@ -101,6 +101,22 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuSub>
+						<DropdownMenuSubTrigger>Promoted</DropdownMenuSubTrigger>
+						<DropdownMenuSubContent>
+							<DropdownMenuRadioGroup value={row.original.promoted.toString()}>
+								{config.promotedMap.map((promoted) => (
+									<DropdownMenuRadioItem
+										onClick={() => mutate({ promoted: promoted.value })}
+										key={promoted.label}
+										value={promoted.value.toString()}
+									>
+										{promoted.label}
+									</DropdownMenuRadioItem>
+								))}
+							</DropdownMenuRadioGroup>
+						</DropdownMenuSubContent>
+					</DropdownMenuSub>
+					<DropdownMenuSub>
 						<DropdownMenuSubTrigger>Visibiliy</DropdownMenuSubTrigger>
 						<DropdownMenuSubContent>
 							<DropdownMenuRadioGroup value={row.original.visible.toString()}>

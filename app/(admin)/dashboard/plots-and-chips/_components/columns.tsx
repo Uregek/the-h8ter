@@ -121,6 +121,33 @@ export const columns: ColumnDef<Plot>[] = [
 		},
 	},
 	{
+		accessorKey: 'promoted',
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Promoted" />
+		),
+		cell: ({ row }) => {
+			const promoted = config.promotedMap.find(
+				(promoted) => promoted.value === row.getValue('promoted'),
+			)
+
+			if (!promoted) {
+				return null
+			}
+
+			return (
+				<div className="flex items-center">
+					{promoted.icon && (
+						<promoted.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+					)}
+					<span>{promoted.label}</span>
+				</div>
+			)
+		},
+		filterFn: (row, id, value) => {
+			return value.includes(row.getValue(id))
+		},
+	},
+	{
 		accessorKey: 'visible',
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title="Visibility" />

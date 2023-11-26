@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useState } from 'react'
 
-import { Crosshair2Icon } from '@radix-ui/react-icons'
+import { Crosshair2Icon, LightningBoltIcon } from '@radix-ui/react-icons'
 import { SearchIcon } from 'lucide-react'
 import Fuse, { IFuseOptions } from 'fuse.js'
 import Link from 'next/link'
@@ -24,12 +24,13 @@ import { cn } from '@/lib/utils'
 import { Plot } from './plot'
 
 const renderPlotsAndChips = (data: PlotsWithChips) => {
-	return data.map(({ id, title, slug, chips }) => (
+	return data.map(({ id, title, slug, chips, promoted }) => (
 		<div
 			key={id}
 			className={cn('flex basis-1/4 flex-col p-3', {
 				'basis-1/2': chips.length >= 10,
 				'basis-full': chips.length >= 15,
+				'bg-primary': promoted,
 			})}
 		>
 			<div className="flex flex-row items-center gap-2">
@@ -42,10 +43,15 @@ const renderPlotsAndChips = (data: PlotsWithChips) => {
 						<Plot>{title}</Plot>
 					</Link>
 				</DialogTrigger>
+				{promoted && <LightningBoltIcon className="text-primary-foreground" />}
 				<DialogTrigger asChild>
 					<a
 						href={`/#${slug}`}
-						className="text-muted-foreground hover:text-accent-foreground"
+						className={cn(
+							'text-muted-foreground hover:text-accent-foreground',
+							promoted &&
+								'text-primary-foreground hover:text-primary-foreground',
+						)}
 					>
 						<Crosshair2Icon />
 					</a>
@@ -54,12 +60,25 @@ const renderPlotsAndChips = (data: PlotsWithChips) => {
 			<div className="flex items-center flex-wrap gap-1 text-sm">
 				{chips.map(({ id, title, ...other }, index) => (
 					<Fragment key={id}>
-						{index !== 0 && <p className="text-sm text-muted-foreground">✦</p>}
+						{index !== 0 && (
+							<p
+								className={cn(
+									'text-sm text-muted-foreground',
+									promoted && 'text-primary-foreground',
+								)}
+							>
+								✦
+							</p>
+						)}
 						<DialogTrigger asChild>
 							<Link
 								prefetch={false}
 								href={`/plots/${slug}/${other.slug}`}
-								className="text-sm text-muted-foreground hover:underline hover:text-accent-foreground"
+								className={cn(
+									'text-sm text-muted-foreground hover:underline hover:text-accent-foreground',
+									promoted &&
+										'text-primary-foreground hover:text-primary-foreground',
+								)}
 							>
 								{title}
 							</Link>
