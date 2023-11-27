@@ -32,11 +32,19 @@ import {
 	PopoverTrigger,
 } from '@/components/ui/popover'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 
 type FieldSchema = {
-	type: 'text' | 'number' | 'textarea' | 'select' | 'radio' | 'checkbox'
+	type:
+		| 'text'
+		| 'number'
+		| 'textarea'
+		| 'select'
+		| 'radio'
+		| 'checkbox'
+		| 'switch'
 }
 
 type DefaultProps = {
@@ -90,6 +98,12 @@ export type CheckboxFieldProps = FieldSchema &
 		empty?: string
 	}
 
+export type SwitchFieldProps = FieldSchema &
+	DefaultProps & {
+		type: 'switch'
+		defaultValue?: boolean
+	}
+
 export type Field =
 	| TextFieldProps
 	| NumberFieldProps
@@ -97,6 +111,7 @@ export type Field =
 	| SelectFieldProps
 	| RadioFieldProps
 	| CheckboxFieldProps
+	| SwitchFieldProps
 
 export type Fields = Record<string, Field>
 
@@ -110,31 +125,55 @@ function generateZodSchema(fields: Fields) {
 				case 'select':
 				case 'radio':
 					schema = z.string()
+					if (required) {
+						schema = schema.min(1, { message: `${label} is required` })
+					}
+					if (min) {
+						schema = schema.min(min, {
+							message: `${label} must have at least ${min} characters`,
+						})
+					}
+					if (max) {
+						schema = schema.max(max, {
+							message: `${label} must not be longer than ${max} characters`,
+						})
+					}
 					break
 				case 'number':
 					schema = z.coerce.number()
+					if (required) {
+						schema = schema.min(1, { message: `${label} is required` })
+					}
+					if (min) {
+						schema = schema.min(min, {
+							message: `${label} must be greater than or equal to ${min}`,
+						})
+					}
+					if (max) {
+						schema = schema.max(max, {
+							message: `${label} must be less than or equal to ${max}`,
+						})
+					}
 					break
 				case 'checkbox':
 					schema = z.array(z.string())
-			}
-			if (required) {
-				schema = schema.min(1, { message: `${label} is required` })
-			}
-			if (min) {
-				schema = schema.min(min, {
-					message:
-						type === 'number'
-							? `${label} must be greater than or equal to ${min}`
-							: `${label} must have at least ${min} characters`,
-				})
-			}
-			if (max) {
-				schema = schema.max(max, {
-					message:
-						type === 'number'
-							? `${label} must be less than or equal to ${max}`
-							: `${label} must not be longer than ${max} characters`,
-				})
+					if (required) {
+						schema = schema.min(1, { message: `${label} is required` })
+					}
+					if (min) {
+						schema = schema.min(min, {
+							message: `${label} must contain at least ${min} selected elements`,
+						})
+					}
+					if (max) {
+						schema = schema.max(max, {
+							message: `${label} must contain no more than ${max} selected elements`,
+						})
+					}
+					break
+				case 'switch':
+					schema = z.coerce.boolean()
+					break
 			}
 			acc[name] = schema
 			return acc
@@ -164,7 +203,7 @@ export function SchemaForm({ children, fields, onSubmit }: SchemaFormProps) {
 
 				return acc
 			},
-			{} as Record<string, string | string[] | number | undefined>,
+			{} as Record<string, string | string[] | number | boolean | undefined>,
 		),
 	})
 
@@ -190,6 +229,13 @@ export function SchemaForm({ children, fields, onSubmit }: SchemaFormProps) {
 														fieldProps.type == 'number' ? 'number' : undefined
 													}
 													{...field}
+													value={
+														field.value as
+															| string
+															| string[]
+															| number
+															| undefined
+													}
 												/>
 											</FormControl>
 											<FormDescription>
@@ -213,7 +259,13 @@ export function SchemaForm({ children, fields, onSubmit }: SchemaFormProps) {
 													max={fieldProps.max}
 													maxLength={fieldProps.max}
 													{...field}
-													value={field.value || undefined}
+													value={
+														(field.value as
+															| string
+															| string[]
+															| number
+															| undefined) || undefined
+													}
 												/>
 											</FormControl>
 
@@ -307,7 +359,7 @@ export function SchemaForm({ children, fields, onSubmit }: SchemaFormProps) {
 															<FormControl>
 																<RadioGroupItem value={value} />
 															</FormControl>
-															<FormLabel className="font-normal">
+															<FormLabel className="font-normal text-sm">
 																{label}
 															</FormLabel>
 														</FormItem>
@@ -358,7 +410,7 @@ export function SchemaForm({ children, fields, onSubmit }: SchemaFormProps) {
 																		}}
 																	/>
 																</FormControl>
-																<FormLabel className="font-normal">
+																<FormLabel className="font-normal text-sm">
 																	{label}
 																</FormLabel>
 															</FormItem>
@@ -366,6 +418,24 @@ export function SchemaForm({ children, fields, onSubmit }: SchemaFormProps) {
 													}}
 												/>
 											))}
+											<FormMessage />
+										</FormItem>
+									)
+								case 'switch':
+									return (
+										<FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+											<div className="space-y-0.5">
+												<FormLabel>{fieldProps.label}</FormLabel>
+												<FormDescription>
+													{fieldProps.description}
+												</FormDescription>
+											</div>
+											<FormControl>
+												<Switch
+													checked={field.value as boolean | undefined}
+													onCheckedChange={field.onChange}
+												/>
+											</FormControl>
 											<FormMessage />
 										</FormItem>
 									)

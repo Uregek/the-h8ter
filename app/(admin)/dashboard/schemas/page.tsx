@@ -72,6 +72,12 @@ export default function SchemasPage() {
 				{ value: '4', label: 'Checkbox 4' },
 			],
 		},
+		switch: {
+			type: 'switch',
+			label: lorem.generateWords(2),
+			defaultValue: true,
+			description: lorem.generateWords(25),
+		},
 	}
 
 	const onSubmit: SchemaFormProps['onSubmit'] = (values) => {
