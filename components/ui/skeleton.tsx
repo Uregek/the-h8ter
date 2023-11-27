@@ -17,7 +17,12 @@ function Skeleton({
 
 	return (
 		<Comp className={cn('animate-pulse rounded-md bg-muted', className)}>
-			<Comp style={{ ...props.style, visibility: 'hidden' }}>{children}</Comp>
+			<Comp
+				className={className}
+				style={{ ...props.style, visibility: 'hidden', padding: 0, margin: 0 }}
+			>
+				{children}
+			</Comp>
 		</Comp>
 	)
 }
