@@ -330,7 +330,7 @@ export function ChipForm({
 					</div>
 
 					{type !== 'create' && (
-						<div className="relative p-3 border border-destructive rounded-md">
+						<div className="relative p-4 border border-destructive rounded-md">
 							<span className="absolute bg-background -top-2 left-2 px-2 justify-center text-xs text-destructive">
 								Danger zone
 							</span>

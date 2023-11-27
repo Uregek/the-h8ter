@@ -50,6 +50,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { Toggle } from '@/components/ui/toggle'
 import {
@@ -289,19 +290,19 @@ export function PlotForm({ plot, asModal, type, handleClose }: PlotFormProps) {
 							control={form.control}
 							name="promoted"
 							render={({ field }) => (
-								<FormItem className="flex flex-row items-start space-x-3 space-y-0">
-									<FormControl>
-										<Checkbox
-											checked={field.value}
-											onCheckedChange={field.onChange}
-										/>
-									</FormControl>
-									<div className="space-y-1 leading-none">
+								<FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+									<div className="space-y-0.5">
 										<FormLabel>Promoted</FormLabel>
 										<FormDescription>
 											You can manage should Plot be of the top list or not.
 										</FormDescription>
 									</div>
+									<FormControl>
+										<Switch
+											checked={field.value}
+											onCheckedChange={field.onChange}
+										/>
+									</FormControl>
 								</FormItem>
 							)}
 						/>
@@ -365,7 +366,7 @@ export function PlotForm({ plot, asModal, type, handleClose }: PlotFormProps) {
 
 						{type !== 'create' && (
 							<>
-								<div className="flex flex-row flex-wrap px-2 py-3 relative border rounded-md gap-2">
+								<div className="flex flex-row flex-wrap p-4 relative border rounded-md gap-2">
 									<span className="absolute bg-background -top-2 left-2 px-2 justify-center text-xs text-primary">
 										Chips
 									</span>
@@ -421,7 +422,7 @@ export function PlotForm({ plot, asModal, type, handleClose }: PlotFormProps) {
 									)}
 								</div>
 
-								<div className="relative p-3 border border-destructive rounded-md">
+								<div className="relative p-4 border border-destructive rounded-md">
 									<span className="absolute bg-background -top-2 left-2 px-2 justify-center text-xs text-destructive">
 										Danger zone
 									</span>
