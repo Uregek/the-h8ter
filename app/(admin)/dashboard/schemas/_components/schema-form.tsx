@@ -3,19 +3,10 @@
 import { ReactNode } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 
-import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import {
-	Command,
-	CommandEmpty,
-	CommandGroup,
-	CommandInput,
-	CommandItem,
-} from '@/components/ui/command'
 import {
 	Form,
 	FormControl,
@@ -26,15 +17,16 @@ import {
 	FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '@/components/ui/popover'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-import { cn } from '@/lib/utils'
 
 type FieldSchema = {
 	type:
@@ -274,62 +266,30 @@ export function SchemaForm({ children, fields, onSubmit }: SchemaFormProps) {
 									)
 								case 'select':
 									return (
-										<FormItem className="flex flex-col">
+										<FormItem>
 											<FormLabel>{fieldProps.label}</FormLabel>
-											<Popover>
-												<PopoverTrigger asChild>
-													<FormControl>
-														<Button
-															variant="outline"
-															role="combobox"
-															className={cn(
-																'w-full justify-between',
-																!field.value && 'text-muted-foreground',
-															)}
-														>
-															{field.value
-																? fieldProps.values.find(
-																		({ value }) => value === field.value,
-																  )?.label
-																: fieldProps.placeholder ||
-																  `Select ${fieldProps.label}`}
-															<CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-														</Button>
-													</FormControl>
-												</PopoverTrigger>
-												<PopoverContent className="w-full p-0">
-													<Command>
-														<CommandInput
-															placeholder={fieldProps.placeholder}
+											<Select
+												onValueChange={field.onChange}
+												defaultValue={fieldProps.defaultValue}
+											>
+												<FormControl>
+													<SelectTrigger>
+														<SelectValue
+															placeholder={
+																fieldProps.placeholder ||
+																`Select ${fieldProps.label}`
+															}
 														/>
-														<CommandEmpty>
-															{fieldProps.empty ||
-																`No ${fieldProps.label} found`}
-														</CommandEmpty>
-														<CommandGroup>
-															{fieldProps.values.map(({ value, label }) => (
-																<CommandItem
-																	value={label}
-																	key={value}
-																	onSelect={() => {
-																		field.onChange(value)
-																	}}
-																>
-																	<CheckIcon
-																		className={cn(
-																			'mr-2 h-4 w-4',
-																			value === field.value
-																				? 'opacity-100'
-																				: 'opacity-0',
-																		)}
-																	/>
-																	{label}
-																</CommandItem>
-															))}
-														</CommandGroup>
-													</Command>
-												</PopoverContent>
-											</Popover>
+													</SelectTrigger>
+												</FormControl>
+												<SelectContent>
+													{fieldProps.values.map(({ value, label }) => (
+														<SelectItem key={value} value={value}>
+															{label}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
 											<FormDescription>
 												{fieldProps.description}
 											</FormDescription>
