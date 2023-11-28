@@ -13,7 +13,6 @@ import { Navigation } from '@/components/layout/navigation'
 import { Button } from '@/components/ui/button'
 import { Search } from '@/components/ui/search'
 import { Skeleton } from '@/components/ui/skeleton'
-import { ToggleMode } from '@/components/ui/toggle-mode'
 
 import { Plot } from '../ui/plot'
 
@@ -24,7 +23,7 @@ export async function Header() {
 		<header className="w-full sticky bg-background/50 backdrop-blur-sm z-20 top-0">
 			<div className="flex p-2 container items-center justify-between w-full mx-auto border-b">
 				<Link href="/" className="leading-7">
-					<Plot>The H8ter</Plot>
+					<Plot>The-H8ter</Plot>
 				</Link>
 				<Search
 					data={data}
@@ -50,7 +49,6 @@ export async function Header() {
 							</SignedOut>
 						</ClerkLoaded>
 					</div>
-					<ToggleMode />
 				</div>
 			</div>
 		</header>
