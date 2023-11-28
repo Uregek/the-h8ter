@@ -1,14 +1,18 @@
 'use client'
 
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 
 import { ClerkProvider as NextClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
 import { useTheme } from 'next-themes'
 
 export function ClerkProvider({ children }: { children: ReactNode }) {
+	const [prefersDark, setPrefersDark] = useState<boolean | null>(null)
 	const { theme } = useTheme()
-	const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+	useEffect(() => {
+		setPrefersDark(window.matchMedia('(prefers-color-scheme: dark)').matches)
+	})
 
 	let calculatedTheme =
 		theme === 'system' ? (prefersDark ? 'dark' : 'light') : theme
