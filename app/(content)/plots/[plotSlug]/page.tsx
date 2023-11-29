@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation'
 import { getPlotWithChips } from '@/actions/get-plots'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { Plot } from '@/components/ui/plot'
-import { Skeleton } from '@/components/ui/skeleton'
 
 import { ChipList } from '../_components/chip-list'
 
@@ -26,8 +25,6 @@ export default async function PlotPage({
 				</p>
 				<Plot>{plot.title}</Plot>
 			</h1>
-
-			<Skeleton className="h-[600px] w-full max-w-screen-lg" />
 
 			<p className="text-center max-w-screen-md">{plot.description}</p>
 
