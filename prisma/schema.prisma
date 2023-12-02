@@ -35,6 +35,7 @@ model Profile {
 model Plot {
   id          String  @id @default(uuid())
   title       String
+  previewUrl  String?
   slug        String  @unique
   description String?
   visible     Boolean @default(true)
