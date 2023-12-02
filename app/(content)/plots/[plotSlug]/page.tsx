@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 
 import { getPlotWithChips } from '@/actions/get-plots'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
+import { ImageHeader } from '@/components/ui/image-header'
 import { Plot } from '@/components/ui/plot'
 
 import { ChipList } from '../_components/chip-list'
@@ -19,6 +20,7 @@ export default async function PlotPage({
 
 	return (
 		<>
+			{plot.previewUrl !== null && <ImageHeader imageSrc={plot.previewUrl} />}
 			<h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl relative">
 				<p className="absolute uppercase top-0 mr-[15px] right-full text-sm text-muted-foreground font-normal">
 					Plot:

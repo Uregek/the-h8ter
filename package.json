@@ -60,6 +60,7 @@
 		"@tanstack/react-query": "^5.8.4",
 		"@tanstack/react-table": "^8.10.7",
 		"@uidotdev/usehooks": "^2.4.1",
+		"@uploadthing/react": "^6.0.2",
 		"axios": "^1.6.2",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.0.0",
@@ -82,6 +83,7 @@
 		"slugify": "^1.6.6",
 		"tailwind-merge": "^2.0.0",
 		"tailwindcss-animate": "^1.0.7",
+		"uploadthing": "^6.0.3",
 		"zod": "^3.22.4"
 	},
 	"devDependencies": {

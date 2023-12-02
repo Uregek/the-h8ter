@@ -58,6 +58,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { Uploader } from '@/components/ui/uploader'
 import { useToast } from '@/lib/use-toast'
 import { cn, slugify } from '@/lib/utils'
 
@@ -162,6 +163,7 @@ export function PlotForm({ plot, asModal, type, handleClose }: PlotFormProps) {
 		defaultValues: useMemo(
 			() => ({
 				title: plot?.title || '',
+				previewUrl: plot?.previewUrl || null,
 				slug: plot?.slug || '',
 				description: plot?.description || null,
 				promoted: plot?.promoted || false,
@@ -175,6 +177,7 @@ export function PlotForm({ plot, asModal, type, handleClose }: PlotFormProps) {
 		if (plot) {
 			form.reset({
 				title: plot.title,
+				previewUrl: plot.previewUrl,
 				slug: plot.slug,
 				description: plot.description,
 				promoted: plot.promoted,
@@ -235,6 +238,27 @@ export function PlotForm({ plot, asModal, type, handleClose }: PlotFormProps) {
 
 						<FormField
 							control={form.control}
+							name="previewUrl"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Preview Image</FormLabel>
+									<FormControl>
+										<Uploader
+											endpoint="plotPreviewImageUploader"
+											value={field.value}
+											onChange={field.onChange}
+										/>
+									</FormControl>
+									<FormDescription>
+										This is your Plot preview image.
+									</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
 							name="description"
 							render={({ field }) => (
 								<FormItem>
@@ -260,22 +284,22 @@ export function PlotForm({ plot, asModal, type, handleClose }: PlotFormProps) {
 									<FormControl>
 										<div className="flex flex-row gap-2">
 											<Input placeholder="Slug" {...field} />
-											<Tooltip>
-												<TooltipTrigger type="button">
-													<Toggle
-														onPressedChange={setLinkSlug}
-														pressed={linkSlug}
-														defaultPressed={linkSlug}
-														variant="outline"
-														aria-label="Toggle italic"
-													>
+											<Toggle
+												onPressedChange={setLinkSlug}
+												pressed={linkSlug}
+												defaultPressed={linkSlug}
+												variant="outline"
+											>
+												<Tooltip>
+													<TooltipTrigger asChild>
 														<Link1Icon className="h-4 w-4" />
-													</Toggle>
-												</TooltipTrigger>
-												<TooltipContent>
-													<p>Link with Title</p>
-												</TooltipContent>
-											</Tooltip>
+													</TooltipTrigger>
+
+													<TooltipContent>
+														<p>Link with Title</p>
+													</TooltipContent>
+												</Tooltip>
+											</Toggle>
 										</div>
 									</FormControl>
 									<FormDescription>
@@ -367,7 +391,7 @@ export function PlotForm({ plot, asModal, type, handleClose }: PlotFormProps) {
 						{type !== 'create' && (
 							<>
 								<div className="flex flex-row flex-wrap p-4 relative border rounded-md gap-2">
-									<span className="absolute bg-background -top-2 left-2 px-2 justify-center text-xs text-primary">
+									<span className="absolute bg-background -top-2 left-2 px-2 justify-center text-xs">
 										Chips
 									</span>
 									{isLoading &&
